@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Practical applications using Rcurvep package</title>
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+      a.sourceLine { display: inline-block; line-height: 1.25; }
+  a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+  a.sourceLine:empty { height: 1.2em; }
+  .sourceCode { overflow: visible; }
+  code.sourceCode { white-space: pre; position: relative; }
+  div.sourceCode { margin: 1em 0; }
+  pre.sourceCode { margin: 0; }
+  @media screen {
+  div.sourceCode { overflow: auto; }
+  }
+  @media print {
+  code.sourceCode { white-space: pre-wrap; }
+  a.sourceLine { text-indent: -1em; padding-left: 1em; }
+  }
+  pre.numberSource a.sourceLine
+    { position: relative; left: -4em; }
+  pre.numberSource a.sourceLine::before
+    { content: attr(title);
+      position: relative; left: -1em; text-align: right; vertical-align: baseline;
+      border: none; pointer-events: all; display: inline-block;
+      -webkit-touch-callout: none; -webkit-user-select: none;
+      -khtml-user-select: none; -moz-user-select: none;
+      -ms-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em;
+      color: #aaaaaa;
+    }
+  pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+  div.sourceCode
+    {  }
+  @media screen {
+  a.sourceLine::before { text-decoration: underline; }
+  }
+  code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+  code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+  code span.at { color: #7d9029; } /* Attribute */
+  code span.bn { color: #40a070; } /* BaseN */
+  code span.bu { } /* BuiltIn */
+  code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+  code span.ch { color: #4070a0; } /* Char */
+  code span.cn { color: #880000; } /* Constant */
+  code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+  code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+  code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+  code span.dt { color: #902000; } /* DataType */
+  code span.dv { color: #40a070; } /* DecVal */
+  code span.er { color: #ff0000; font-weight: bold; } /* Error */
+  code span.ex { } /* Extension */
+  code span.fl { color: #40a070; } /* Float */
+  code span.fu { color: #06287e; } /* Function */
+  code span.im { } /* Import */
+  code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+  code span.op { color: #666666; } /* Operator */
+  code span.ot { color: #007020; } /* Other */
+  code span.pp { color: #bc7a00; } /* Preprocessor */
+  code span.sc { color: #4070a0; } /* SpecialChar */
+  code span.ss { color: #bb6688; } /* SpecialString */
+  code span.st { color: #4070a0; } /* String */
+  code span.va { color: #19177c; } /* Variable */
+  code span.vs { color: #4070a0; } /* VerbatimString */
+  code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Practical applications using Rcurvep package</h1>
+
+
+
+<div id="install-the-package" class="section level2">
+<h2>Install the package</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># the development version from GitHub:</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="co"># install.packages(&quot;devtools&quot;)</span></a>
+<a class="sourceLine" id="cb1-3" title="3">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;moggces/Rcurvep&quot;</span>)</a>
+<a class="sourceLine" id="cb1-4" title="4">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;moggces/Rcurvep&quot;</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+</div>
+<div id="load-the-library" class="section level2">
+<h2>Load the library</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">library</span>(Rcurvep)</a></code></pre></div>
+</div>
+<div id="load-the-sample-dataset" class="section level2">
+<h2>Load the sample dataset</h2>
+<p><em>zfishdev</em> a subset of data from a 32-compound screen using zebrafish developmental assays. Our goal is to decide whether a compound is active in a particular toxicity endpoint. The <strong>active</strong> is determined by if the responses is monotonic (as the increase of concentration). In addition, the maximum response has to be larger than a certain response threshold.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># More details of the dataset can be found ?zfishdev.</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw">data</span>(zfishdev) </a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="kw">str</span>(zfishdev)</a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt; Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    96 obs. of  5 variables:</span></a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="co">#&gt;  $ endpoint: chr  &quot;percent_affected_48&quot; &quot;percent_affected_48&quot; &quot;percent_affected_48&quot; &quot;percent_affected_48&quot; ...</span></a>
+<a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt;  $ chemical: chr  &quot;Caffeine|58-08-2&quot; &quot;Caffeine|58-08-2&quot; &quot;Caffeine|58-08-2&quot; &quot;Caffeine|58-08-2&quot; ...</span></a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt;  $ conc    : num  -4 -3.82 -3.52 -3.3 -3.12 -3 -2.82 -2.7 -7 -6.52 ...</span></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt;  $ n_in    : int  0 2 5 15 15 15 15 15 0 2 ...</span></a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="co">#&gt;  $ N       : int  15 15 15 15 15 15 15 15 15 15 ...</span></a></code></pre></div>
+</div>
+<div id="rcurvep-method" class="section level2">
+<h2>Rcurvep method</h2>
+<p>The Rcurvep is a tool to decide whether responses are monotonic (as the increase of concentration) based on a set of pre-defined parameters. The default setting of those parameters can be obtained through <code>curvep_defaults()</code>. The <strong>TRSH</strong> is the threshold parameter, below which, all responses are considered as noise. This threshold is particularly important for toxicologists, since the point-of-departure (POD) can be defined as the concentration at which response equivalent to this threshold. The threshold can also be called as benchmark response (<strong>BMR</strong>).</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">curvep_defaults</span>()</a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt; curvep configuration parameters</span></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="co">#&gt;          TRSH:    [15]</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt;          RNGE:    [-1e+06]</span></a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt;          MXDV:    [5]</span></a>
+<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt;          CARR:    [0]</span></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt;          BSFT:    [3]</span></a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="co">#&gt;          USHP:    [4]</span></a>
+<a class="sourceLine" id="cb4-10" title="10"><span class="co">#&gt;       TrustHi:    [TRUE]</span></a>
+<a class="sourceLine" id="cb4-11" title="11"><span class="co">#&gt;     StrictImp:    [TRUE]</span></a>
+<a class="sourceLine" id="cb4-12" title="12"><span class="co">#&gt;          DUMV:    [-999]</span></a>
+<a class="sourceLine" id="cb4-13" title="13"><span class="co">#&gt;          TLOG:    [-24]</span></a>
+<a class="sourceLine" id="cb4-14" title="14"><span class="co">#&gt;          seed:    [NA]</span></a>
+<a class="sourceLine" id="cb4-15" title="15"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-16" title="16"><span class="co">#For details of parameters, see ?curvep.</span></a></code></pre></div>
+</div>
+<div id="run-rcurvep-on-datasets-using-combi_run_rcurvep" class="section level2">
+<h2>Run Rcurvep on datasets using combi_run_rcurvep()</h2>
+<p>Since <em>zfishdev</em> does not contain a column with responses, <code>create_dataset()</code> can be used to generate the responses for this particular type of data. However, this function is already incorporated.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">identical</span>(</a>
+<a class="sourceLine" id="cb5-2" title="2">  <span class="kw">combi_run_rcurvep</span>(zfishdev, <span class="dt">RNGE =</span> <span class="dv">1000000</span>),</a>
+<a class="sourceLine" id="cb5-3" title="3">  <span class="kw">combi_run_rcurvep</span>(<span class="kw">create_dataset</span>(zfishdev), <span class="dt">RNGE =</span> <span class="dv">1000000</span>)</a>
+<a class="sourceLine" id="cb5-4" title="4">)</a>
+<a class="sourceLine" id="cb5-5" title="5"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
+</div>
+<div id="run-rcurvep-when-there-is-a-preferred-bmr" class="section level2">
+<h2>Run Rcurvep when there is a preferred BMR</h2>
+<p>If there is a preferred BMR, you can run the dataset using the threshold. The <strong>act_set</strong> in the result contains potency and efficacy information of the concentration-response data (aka curve).</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">out &lt;-<span class="st"> </span><span class="kw">combi_run_rcurvep</span>(</a>
+<a class="sourceLine" id="cb6-2" title="2">  zfishdev,</a>
+<a class="sourceLine" id="cb6-3" title="3">  <span class="dt">TRSH =</span> <span class="dv">25</span>, <span class="co"># BMR = 25</span></a>
+<a class="sourceLine" id="cb6-4" title="4">  <span class="dt">RNGE =</span> <span class="dv">1000000</span> <span class="co"># increasing direction</span></a>
+<a class="sourceLine" id="cb6-5" title="5">)</a>
+<a class="sourceLine" id="cb6-6" title="6">out</a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt; 4 endpoint(s) and 3 chemical(s)</span></a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt; Components in the list: result, config</span></a>
+<a class="sourceLine" id="cb6-10" title="10"><span class="co">#&gt; Components in the result: act_set, resp_set, fp_set</span></a>
+<a class="sourceLine" id="cb6-11" title="11"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb6-12" title="12">out<span class="op">$</span>config</a>
+<a class="sourceLine" id="cb6-13" title="13"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb6-14" title="14"><span class="co">#&gt; curvep configuration parameters</span></a>
+<a class="sourceLine" id="cb6-15" title="15"><span class="co">#&gt;          TRSH:    [25]</span></a>
+<a class="sourceLine" id="cb6-16" title="16"><span class="co">#&gt;          RNGE:    [1e+06]</span></a>
+<a class="sourceLine" id="cb6-17" title="17"><span class="co">#&gt;          MXDV:    [5]</span></a>
+<a class="sourceLine" id="cb6-18" title="18"><span class="co">#&gt;          CARR:    [0]</span></a>
+<a class="sourceLine" id="cb6-19" title="19"><span class="co">#&gt;          BSFT:    [3]</span></a>
+<a class="sourceLine" id="cb6-20" title="20"><span class="co">#&gt;          USHP:    [4]</span></a>
+<a class="sourceLine" id="cb6-21" title="21"><span class="co">#&gt;       TrustHi:    [TRUE]</span></a>
+<a class="sourceLine" id="cb6-22" title="22"><span class="co">#&gt;     StrictImp:    [TRUE]</span></a>
+<a class="sourceLine" id="cb6-23" title="23"><span class="co">#&gt;          DUMV:    [-999]</span></a>
+<a class="sourceLine" id="cb6-24" title="24"><span class="co">#&gt;          TLOG:    [-24]</span></a>
+<a class="sourceLine" id="cb6-25" title="25"><span class="co">#&gt;          seed:    [NA]</span></a>
+<a class="sourceLine" id="cb6-26" title="26"><span class="co">#&gt; </span></a></code></pre></div>
+</div>
+<div id="summarize-activity-data-from-rcurvep" class="section level2">
+<h2>Summarize activity data from Rcurvep</h2>
+<p>The results of the summary is saved in the tibble, <strong>act_summary</strong>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">sum_out &lt;-<span class="st"> </span><span class="kw">summarize_rcurvep_output</span>(out)</a>
+<a class="sourceLine" id="cb7-2" title="2">sum_out</a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="co">#&gt; 4 endpoint(s) and 3 chemical(s)</span></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="co">#&gt; Components in the list: result, config, act_summary</span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt; Components in the result: act_set, resp_set, fp_set</span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt; </span></a></code></pre></div>
+</div>
+<div id="add-confidence-interval-for-activity-data-from-rcurvep" class="section level2">
+<h2>Add confidence interval for activity data from Rcurvep</h2>
+<p>The confidence interval is calculated using simulated datasets created by bootstrapping the original responses. By setting the parameter, <strong>n_samples</strong>, number of curves are simulated. The same <code>summarize_rcurvep_output()</code> can be used to summarize the results.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">set.seed</span>(<span class="dv">300</span>)</a>
+<a class="sourceLine" id="cb8-2" title="2">out &lt;-<span class="st"> </span><span class="kw">combi_run_rcurvep</span>(</a>
+<a class="sourceLine" id="cb8-3" title="3">  zfishdev,</a>
+<a class="sourceLine" id="cb8-4" title="4">  <span class="dt">n_samples =</span> <span class="dv">10</span>, <span class="co"># often 1000 samples are preferred</span></a>
+<a class="sourceLine" id="cb8-5" title="5">  <span class="dt">TRSH =</span> <span class="dv">25</span>,</a>
+<a class="sourceLine" id="cb8-6" title="6">  <span class="dt">RNGE =</span> <span class="dv">1000000</span>,</a>
+<a class="sourceLine" id="cb8-7" title="7">  <span class="dt">keep_sets =</span> <span class="st">&quot;act_set&quot;</span></a>
+<a class="sourceLine" id="cb8-8" title="8">)</a>
+<a class="sourceLine" id="cb8-9" title="9">sum_out &lt;-<span class="st"> </span><span class="kw">summarize_rcurvep_output</span>(out)</a>
+<a class="sourceLine" id="cb8-10" title="10">sum_out</a>
+<a class="sourceLine" id="cb8-11" title="11"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-12" title="12"><span class="co">#&gt; 4 endpoint(s) and 3 chemical(s)</span></a>
+<a class="sourceLine" id="cb8-13" title="13"><span class="co">#&gt; Components in the list: result, config, act_summary</span></a>
+<a class="sourceLine" id="cb8-14" title="14"><span class="co">#&gt; Components in the result: act_set</span></a>
+<a class="sourceLine" id="cb8-15" title="15"><span class="co">#&gt; </span></a></code></pre></div>
+</div>
+<div id="run-rcurvep-when-an-optimalpreferred-bmr-is-unknown" class="section level2">
+<h2>Run Rcurvep when an optimal/preferred BMR is unknown</h2>
+<p>The optimal BMR may be defined as the threshold at which the potency estimation is more accurate. The concept can be translated as the lowest threshold (which gives the highest potency), at which a decrease of variance in potency estimation is stabilized. By using the simulated datasets, the pooled variance across chemicals at a certain threshold can be estimated.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="co"># The combi_run_rcurvep() can be used for a combination of Curvep parameters. </span></a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="co"># finishing the code will take some time. </span></a>
+<a class="sourceLine" id="cb9-3" title="3"></a>
+<a class="sourceLine" id="cb9-4" title="4"><span class="kw">set.seed</span>(<span class="dv">300</span>)</a>
+<a class="sourceLine" id="cb9-5" title="5"><span class="kw">data</span>(zfishdev_all)</a>
+<a class="sourceLine" id="cb9-6" title="6"></a>
+<a class="sourceLine" id="cb9-7" title="7">zfishdev_act &lt;-<span class="st"> </span><span class="kw">combi_run_rcurvep</span>(</a>
+<a class="sourceLine" id="cb9-8" title="8">  </a>
+<a class="sourceLine" id="cb9-9" title="9">  zfishdev_all, </a>
+<a class="sourceLine" id="cb9-10" title="10">  <span class="dt">n_samples =</span> <span class="dv">100</span>, </a>
+<a class="sourceLine" id="cb9-11" title="11">  <span class="dt">keep_sets =</span> <span class="kw">c</span>(<span class="st">&quot;act_set&quot;</span>),</a>
+<a class="sourceLine" id="cb9-12" title="12">  <span class="dt">TRSH =</span> <span class="kw">seq</span>(<span class="dv">5</span>, <span class="dv">95</span>, <span class="dt">by =</span> <span class="dv">5</span>), <span class="co"># test all candidates, 5 to 95</span></a>
+<a class="sourceLine" id="cb9-13" title="13">  <span class="dt">RNGE =</span> <span class="dv">1000000</span>, </a>
+<a class="sourceLine" id="cb9-14" title="14">  <span class="dt">CARR =</span> <span class="dv">20</span></a>
+<a class="sourceLine" id="cb9-15" title="15">)</a></code></pre></div>
+</div>
+<div id="estimate-the-bmr" class="section level2">
+<h2>Estimate the BMR</h2>
+<p>For the two endpoints, BMR = 25 (in <strong>bmr_ori</strong> column) is suggested for the <em>percent_affected_96</em> endpoint with an <em>OK</em> comment but for the <em>percent_mortality_96</em> endpoint, <em>check</em> is noted.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">data</span>(zfishdev_act)</a>
+<a class="sourceLine" id="cb10-2" title="2">bmr_out &lt;-<span class="st"> </span><span class="kw">estimate_dataset_bmr</span>(zfishdev_act, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb10-3" title="3">bmr_out<span class="op">$</span>outcome</a>
+<a class="sourceLine" id="cb10-4" title="4"><span class="co">#&gt; # A tibble: 2 x 12</span></a>
+<a class="sourceLine" id="cb10-5" title="5"><span class="co">#&gt;     RNGE  CARR endpoint bmr_ori p1_ori p2_ori bmr_exp p1_exp p2_exp cor_exp_fit</span></a>
+<a class="sourceLine" id="cb10-6" title="6"><span class="co">#&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;  &lt;int&gt;  &lt;int&gt;   &lt;dbl&gt;  &lt;int&gt;  &lt;int&gt;       &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb10-7" title="7"><span class="co">#&gt; 1 1.00e6    20 percent~      25      1     19      20      1     19       0.994</span></a>
+<a class="sourceLine" id="cb10-8" title="8"><span class="co">#&gt; 2 1.00e6    20 percent~      55      6     19      50      1     19       0.789</span></a>
+<a class="sourceLine" id="cb10-9" title="9"><span class="co">#&gt; # ... with 2 more variables: cor_lm_fit &lt;dbl&gt;, qc &lt;chr&gt;</span></a></code></pre></div>
+</div>
+<div id="display-the-diagnostic-curves-for-bmr-estimation" class="section level2">
+<h2>Display the diagnostic curves for BMR estimation</h2>
+<p>It turns out for the <em>percent_mortality_96</em> endpoint, the shape is not in the right form (as the <em>percent_affected_96</em> endpoint).</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">plot</span>(bmr_out)</a>
+<a class="sourceLine" id="cb11-2" title="2"><span class="co">#&gt; $`1`</span></a></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+</div>
+<div id="run-parametric-fitting-on-datasets" class="section level2">
+<h2>Run parametric fitting on datasets</h2>
+<p>Since <em>zfishdev</em> does not contain a column with responses, <code>create_dataset()</code> needs to be used to generate the responses for this particular type of data. Unlike <code>combi_run_rcurvep()</code>, <code>create_dataset()</code> has to be called explicitly.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">fitd &lt;-<span class="st"> </span><span class="kw">run_fit</span>(<span class="kw">create_dataset</span>(zfishdev), <span class="dt">hill_pdir =</span> <span class="dv">1</span>, <span class="dt">modls =</span> <span class="st">&quot;hill&quot;</span>)</a>
+<a class="sourceLine" id="cb12-2" title="2">fitd</a>
+<a class="sourceLine" id="cb12-3" title="3"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb12-4" title="4"><span class="co">#&gt; 4 endpoint(s) and 3 chemical(s)</span></a>
+<a class="sourceLine" id="cb12-5" title="5"><span class="co">#&gt; Components in the list: result, result_nested</span></a>
+<a class="sourceLine" id="cb12-6" title="6"><span class="co">#&gt; Components in the result: fit_set, resp_set</span></a>
+<a class="sourceLine" id="cb12-7" title="7"><span class="co">#&gt; </span></a></code></pre></div>
+</div>
+<div id="summarize-parametric-fitting-results-using-a-preferred-bmr" class="section level2">
+<h2>Summarize parametric fitting results using a preferred BMR</h2>
+<p>The results of the summary is saved in the tibble, <strong>act_summary</strong>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">fitd_sum_out &lt;-<span class="st"> </span><span class="kw">summarize_fit_output</span>(fitd, <span class="dt">thr_resp  =</span> <span class="dv">25</span>)</a>
+<a class="sourceLine" id="cb13-2" title="2">fitd_sum_out</a>
+<a class="sourceLine" id="cb13-3" title="3"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb13-4" title="4"><span class="co">#&gt; 4 endpoint(s) and 3 chemical(s)</span></a>
+<a class="sourceLine" id="cb13-5" title="5"><span class="co">#&gt; Components in the list: result, result_nested, act_summary</span></a>
+<a class="sourceLine" id="cb13-6" title="6"><span class="co">#&gt; Components in the result: fit_set, resp_set, act_set</span></a>
+<a class="sourceLine" id="cb13-7" title="7"><span class="co">#&gt; </span></a></code></pre></div>
+</div>
+<div id="add-confidence-interval-for-activity-data-from-parametric-fitting-strictly-to-hill-equation" class="section level2">
+<h2>Add confidence interval for activity data from parametric fitting (strictly to Hill equation)</h2>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">fitd &lt;-<span class="st"> </span><span class="kw">run_fit</span>(<span class="kw">create_dataset</span>(zfishdev), <span class="dt">hill_pdir =</span> <span class="dv">1</span>, <span class="dt">n_samples =</span> <span class="dv">10</span>, <span class="dt">modls =</span> <span class="st">&quot;hill&quot;</span>)</a></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
