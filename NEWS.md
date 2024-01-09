@@ -74,5 +74,11 @@
 # Rcurvep 1.2.1
 * change: fix a bug in get_base_cols when only one set available (act_set, resp_set, fp_set) when doing the merge_rcurvep_objs
 
+# Rcurvep 1.3.0
+* new: add java curve class2 as the model
+
+# Rcurvep 1.3.1
+* new: add a vignette for using parallel computing in Rcurvep package 
+* change: use furrr::future_pmap for the combi_run_curvep() and use furrr::future_map for the run_fit()
 
 

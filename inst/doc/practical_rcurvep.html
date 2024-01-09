@@ -331,7 +331,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># the development version from GitHub:</span></a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="co"># install.packages(&quot;devtools&quot;)</span></a>
 <a class="sourceLine" id="cb1-3" title="3">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;moggces/Rcurvep&quot;</span>)</a>
-<a class="sourceLine" id="cb1-4" title="4">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;moggces/Rcurvep&quot;</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb1-4" title="4">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;moggces/Rcurvep&quot;</span>, <span class="dt">dependencies =</span> <span class="ot">TRUE</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 </div>
 <div id="load-the-library" class="section level2">
 <h2>Load the library</h2>
@@ -343,12 +343,12 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># More details of the dataset can be found ?zfishdev.</span></a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="kw">data</span>(zfishdev) </a>
 <a class="sourceLine" id="cb3-3" title="3"><span class="kw">str</span>(zfishdev)</a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt; Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    96 obs. of  5 variables:</span></a>
-<a class="sourceLine" id="cb3-5" title="5"><span class="co">#&gt;  $ endpoint: chr  &quot;percent_affected_48&quot; &quot;percent_affected_48&quot; &quot;percent_affected_48&quot; &quot;percent_affected_48&quot; ...</span></a>
-<a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt;  $ chemical: chr  &quot;Caffeine|58-08-2&quot; &quot;Caffeine|58-08-2&quot; &quot;Caffeine|58-08-2&quot; &quot;Caffeine|58-08-2&quot; ...</span></a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt;  $ conc    : num  -4 -3.82 -3.52 -3.3 -3.12 -3 -2.82 -2.7 -7 -6.52 ...</span></a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt;  $ n_in    : int  0 2 5 15 15 15 15 15 0 2 ...</span></a>
-<a class="sourceLine" id="cb3-9" title="9"><span class="co">#&gt;  $ N       : int  15 15 15 15 15 15 15 15 15 15 ...</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt; tibble [96 × 5] (S3: tbl_df/tbl/data.frame)</span></a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="co">#&gt;  $ endpoint: chr [1:96] &quot;percent_affected_48&quot; &quot;percent_affected_48&quot; &quot;percent_affected_48&quot; &quot;percent_affected_48&quot; ...</span></a>
+<a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt;  $ chemical: chr [1:96] &quot;Caffeine|58-08-2&quot; &quot;Caffeine|58-08-2&quot; &quot;Caffeine|58-08-2&quot; &quot;Caffeine|58-08-2&quot; ...</span></a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt;  $ conc    : num [1:96] -4 -3.82 -3.52 -3.3 -3.12 -3 -2.82 -2.7 -7 -6.52 ...</span></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt;  $ n_in    : int [1:96] 0 2 5 15 15 15 15 15 0 2 ...</span></a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="co">#&gt;  $ N       : int [1:96] 15 15 15 15 15 15 15 15 15 15 ...</span></a></code></pre></div>
 </div>
 <div id="rcurvep-method" class="section level2">
 <h2>Rcurvep method</h2>
@@ -465,12 +465,11 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb10-2" title="2">bmr_out &lt;-<span class="st"> </span><span class="kw">estimate_dataset_bmr</span>(zfishdev_act, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb10-3" title="3">bmr_out<span class="op">$</span>outcome</a>
 <a class="sourceLine" id="cb10-4" title="4"><span class="co">#&gt; # A tibble: 2 × 12</span></a>
-<a class="sourceLine" id="cb10-5" title="5"><span class="co">#&gt;      RNGE  CARR endpoint     bmr_ori p1_ori p2_ori bmr_exp p1_exp p2_exp cor_e…¹</span></a>
-<a class="sourceLine" id="cb10-6" title="6"><span class="co">#&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;  &lt;int&gt;  &lt;int&gt;   &lt;dbl&gt;  &lt;int&gt;  &lt;int&gt;   &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb10-7" title="7"><span class="co">#&gt; 1 1000000    20 percent_aff…      25      1     19      20      1     19   0.994</span></a>
-<a class="sourceLine" id="cb10-8" title="8"><span class="co">#&gt; 2 1000000    20 percent_mor…      55      6     19      50      1     19   0.789</span></a>
-<a class="sourceLine" id="cb10-9" title="9"><span class="co">#&gt; # … with 2 more variables: cor_lm_fit &lt;dbl&gt;, qc &lt;chr&gt;, and abbreviated variable</span></a>
-<a class="sourceLine" id="cb10-10" title="10"><span class="co">#&gt; #   name ¹​cor_exp_fit</span></a></code></pre></div>
+<a class="sourceLine" id="cb10-5" title="5"><span class="co">#&gt;      RNGE  CARR endpoint bmr_ori p1_ori p2_ori bmr_exp p1_exp p2_exp cor_exp_fit</span></a>
+<a class="sourceLine" id="cb10-6" title="6"><span class="co">#&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;  &lt;int&gt;  &lt;int&gt;   &lt;dbl&gt;  &lt;int&gt;  &lt;int&gt;       &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb10-7" title="7"><span class="co">#&gt; 1 1000000    20 percent…      25      1     19      20      1     19       0.994</span></a>
+<a class="sourceLine" id="cb10-8" title="8"><span class="co">#&gt; 2 1000000    20 percent…      55      6     19      50      1     19       0.789</span></a>
+<a class="sourceLine" id="cb10-9" title="9"><span class="co">#&gt; # ℹ 2 more variables: cor_lm_fit &lt;dbl&gt;, qc &lt;chr&gt;</span></a></code></pre></div>
 </div>
 <div id="display-the-diagnostic-curves-for-bmr-estimation" class="section level2">
 <h2>Display the diagnostic curves for BMR estimation</h2>
@@ -482,28 +481,63 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="run-parametric-fitting-on-datasets" class="section level2">
 <h2>Run parametric fitting on datasets</h2>
 <p>Since <em>zfishdev</em> does not contain a column with responses, <code>create_dataset()</code> needs to be used to generate the responses for this particular type of data. Unlike <code>combi_run_rcurvep()</code>, <code>create_dataset()</code> has to be called explicitly.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">fitd &lt;-<span class="st"> </span><span class="kw">run_fit</span>(<span class="kw">create_dataset</span>(zfishdev), <span class="dt">hill_pdir =</span> <span class="dv">1</span>, <span class="dt">modls =</span> <span class="st">&quot;hill&quot;</span>)</a>
-<a class="sourceLine" id="cb12-2" title="2">fitd</a>
-<a class="sourceLine" id="cb12-3" title="3"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-4" title="4"><span class="co">#&gt; 4 endpoint(s) and 3 chemical(s)</span></a>
-<a class="sourceLine" id="cb12-5" title="5"><span class="co">#&gt; Components in the list: result, result_nested</span></a>
-<a class="sourceLine" id="cb12-6" title="6"><span class="co">#&gt; Components in the result: fit_set, resp_set</span></a>
-<a class="sourceLine" id="cb12-7" title="7"><span class="co">#&gt; </span></a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="co"># set the preferred direction as increasing hill_pdir = 1</span></a>
+<a class="sourceLine" id="cb12-2" title="2"><span class="co"># this is to use the 3-parameter hill </span></a>
+<a class="sourceLine" id="cb12-3" title="3">fitd1 &lt;-<span class="st"> </span><span class="kw">run_fit</span>(<span class="kw">create_dataset</span>(zfishdev), <span class="dt">hill_pdir =</span> <span class="dv">1</span>, <span class="dt">modls =</span> <span class="st">&quot;hill&quot;</span>)</a>
+<a class="sourceLine" id="cb12-4" title="4">fitd1</a>
+<a class="sourceLine" id="cb12-5" title="5"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb12-6" title="6"><span class="co">#&gt; 4 endpoint(s) and 3 chemical(s)</span></a>
+<a class="sourceLine" id="cb12-7" title="7"><span class="co">#&gt; Components in the list: result, result_nested</span></a>
+<a class="sourceLine" id="cb12-8" title="8"><span class="co">#&gt; Components in the result: fit_set, resp_set</span></a>
+<a class="sourceLine" id="cb12-9" title="9"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb12-10" title="10"></a>
+<a class="sourceLine" id="cb12-11" title="11"><span class="co"># can also use the curve class2 4-parameter hill with classification SD as 5% </span></a>
+<a class="sourceLine" id="cb12-12" title="12"><span class="co"># please ?fit_cc2_modl to understand curve classification</span></a>
+<a class="sourceLine" id="cb12-13" title="13">fitd2 &lt;-<span class="st"> </span><span class="kw">run_fit</span>(<span class="kw">create_dataset</span>(zfishdev), <span class="dt">cc2_classSD =</span> <span class="dv">5</span>, <span class="dt">modls =</span> <span class="st">&quot;cc2&quot;</span>)</a>
+<a class="sourceLine" id="cb12-14" title="14">fitd2 </a>
+<a class="sourceLine" id="cb12-15" title="15"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb12-16" title="16"><span class="co">#&gt; 4 endpoint(s) and 3 chemical(s)</span></a>
+<a class="sourceLine" id="cb12-17" title="17"><span class="co">#&gt; Components in the list: result, result_nested</span></a>
+<a class="sourceLine" id="cb12-18" title="18"><span class="co">#&gt; Components in the result: fit_set, resp_set</span></a>
+<a class="sourceLine" id="cb12-19" title="19"><span class="co">#&gt; </span></a></code></pre></div>
 </div>
 <div id="summarize-parametric-fitting-results-using-a-preferred-bmr" class="section level2">
 <h2>Summarize parametric fitting results using a preferred BMR</h2>
 <p>The results of the summary is saved in the tibble, <strong>act_summary</strong>.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">fitd_sum_out &lt;-<span class="st"> </span><span class="kw">summarize_fit_output</span>(fitd, <span class="dt">thr_resp  =</span> <span class="dv">25</span>)</a>
-<a class="sourceLine" id="cb13-2" title="2">fitd_sum_out</a>
-<a class="sourceLine" id="cb13-3" title="3"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb13-4" title="4"><span class="co">#&gt; 4 endpoint(s) and 3 chemical(s)</span></a>
-<a class="sourceLine" id="cb13-5" title="5"><span class="co">#&gt; Components in the list: result, result_nested, act_summary</span></a>
-<a class="sourceLine" id="cb13-6" title="6"><span class="co">#&gt; Components in the result: fit_set, resp_set, act_set</span></a>
-<a class="sourceLine" id="cb13-7" title="7"><span class="co">#&gt; </span></a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"></a>
+<a class="sourceLine" id="cb13-2" title="2"><span class="co"># thr_resp will get BMC10% and perc_resp will get EC20%</span></a>
+<a class="sourceLine" id="cb13-3" title="3"></a>
+<a class="sourceLine" id="cb13-4" title="4"></a>
+<a class="sourceLine" id="cb13-5" title="5"><span class="co"># hill with 3-parameter </span></a>
+<a class="sourceLine" id="cb13-6" title="6">fitd_sum_out1 &lt;-<span class="st"> </span><span class="kw">summarize_fit_output</span>(fitd1, <span class="dt">thr_resp  =</span> <span class="dv">10</span>, <span class="dt">perc_resp =</span> <span class="dv">20</span>, <span class="dt">extract_only =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb13-7" title="7"></a>
+<a class="sourceLine" id="cb13-8" title="8"><span class="co"># cc2 (hill with 4-parameter + curve classification)</span></a>
+<a class="sourceLine" id="cb13-9" title="9">fitd_sum_out2 &lt;-<span class="st"> </span><span class="kw">summarize_fit_output</span>(fitd2, <span class="dt">thr_resp  =</span> <span class="dv">10</span>, <span class="dt">perc_resp =</span> <span class="dv">20</span>, <span class="dt">extract_only =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 </div>
-<div id="add-confidence-interval-for-activity-data-from-parametric-fitting-strictly-to-hill-equation" class="section level2">
-<h2>Add confidence interval for activity data from parametric fitting (strictly to Hill equation)</h2>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">fitd &lt;-<span class="st"> </span><span class="kw">run_fit</span>(<span class="kw">create_dataset</span>(zfishdev), <span class="dt">hill_pdir =</span> <span class="dv">1</span>, <span class="dt">n_samples =</span> <span class="dv">10</span>, <span class="dt">modls =</span> <span class="st">&quot;hill&quot;</span>)</a></code></pre></div>
+<div id="inspect-concordance-between-two-parametric-fits" class="section level2">
+<h2>Inspect concordance between two parametric fits</h2>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="co">#EC20% concordance (when both methods provide values)</span></a>
+<a class="sourceLine" id="cb14-2" title="2"><span class="kw">cor</span>(fitd_sum_out1<span class="op">$</span>result<span class="op">$</span>act_set<span class="op">$</span>ECxx, fitd_sum_out2<span class="op">$</span>result<span class="op">$</span>act_set<span class="op">$</span>ECxx, <span class="dt">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>)</a>
+<a class="sourceLine" id="cb14-3" title="3"><span class="co">#&gt; [1] 0.9941618</span></a>
+<a class="sourceLine" id="cb14-4" title="4"></a>
+<a class="sourceLine" id="cb14-5" title="5"><span class="co">#BMC10% (when both methods provide values)</span></a>
+<a class="sourceLine" id="cb14-6" title="6"><span class="kw">cor</span>(fitd_sum_out1<span class="op">$</span>result<span class="op">$</span>act_set<span class="op">$</span>POD, fitd_sum_out2<span class="op">$</span>result<span class="op">$</span>act_set<span class="op">$</span>POD, <span class="dt">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>)</a>
+<a class="sourceLine" id="cb14-7" title="7"><span class="co">#&gt; [1] 0.9888046</span></a>
+<a class="sourceLine" id="cb14-8" title="8"></a>
+<a class="sourceLine" id="cb14-9" title="9"><span class="co">#EC50 (when both methods provide values)</span></a>
+<a class="sourceLine" id="cb14-10" title="10"><span class="kw">cor</span>(fitd_sum_out1<span class="op">$</span>result<span class="op">$</span>act_set<span class="op">$</span>EC50, fitd_sum_out2<span class="op">$</span>result<span class="op">$</span>act_set<span class="op">$</span>EC50, <span class="dt">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>)</a>
+<a class="sourceLine" id="cb14-11" title="11"><span class="co">#&gt; [1] 0.9994521</span></a>
+<a class="sourceLine" id="cb14-12" title="12"></a>
+<a class="sourceLine" id="cb14-13" title="13"></a>
+<a class="sourceLine" id="cb14-14" title="14"><span class="co"># check number of curves consider as active by both</span></a>
+<a class="sourceLine" id="cb14-15" title="15"><span class="kw">sum</span>(fitd_sum_out1<span class="op">$</span>result<span class="op">$</span>act_set<span class="op">$</span>hit <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="co"># no fit</span></a>
+<a class="sourceLine" id="cb14-16" title="16"><span class="co">#&gt; [1] 7</span></a>
+<a class="sourceLine" id="cb14-17" title="17"><span class="kw">sum</span>(fitd_sum_out2<span class="op">$</span>result<span class="op">$</span>act_set<span class="op">$</span>hit <span class="op">==</span><span class="st"> </span><span class="dv">4</span>) <span class="co"># cc2 = 4 (inactive)</span></a>
+<a class="sourceLine" id="cb14-18" title="18"><span class="co">#&gt; [1] 7</span></a></code></pre></div>
+</div>
+<div id="add-confidence-interval-for-activity-data-from-parametric-fitting-currently-is-only-available-to-3-parameter-hill-equation-from-tcpl" class="section level2">
+<h2>Add confidence interval for activity data from parametric fitting (currently is only available to 3-parameter Hill equation from tcpl)</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">fitd &lt;-<span class="st"> </span><span class="kw">run_fit</span>(<span class="kw">create_dataset</span>(zfishdev), <span class="dt">hill_pdir =</span> <span class="dv">1</span>, <span class="dt">n_samples =</span> <span class="dv">10</span>, <span class="dt">modls =</span> <span class="st">&quot;hill&quot;</span>)</a></code></pre></div>
 </div>
 
 
