@@ -1600,10 +1600,11 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="set-up-the-packages" class="section level1">
 <h1>Set up the packages</h1>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(future)</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(purrr)</a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="co">#library(microbenchmark) # it is needed if recalculating the comparison</span></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="kw">library</span>(Rcurvep)</a></code></pre></div>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(furrr)</a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="kw">library</span>(purrr)</a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="co">#library(microbenchmark) # it is needed if recalculating the comparison</span></a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="kw">library</span>(Rcurvep)</a></code></pre></div>
 </div>
 <div id="datasets-from-rcurvep-package" class="section level1">
 <h1>datasets from Rcurvep package</h1>
@@ -1614,7 +1615,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="when-no-preferred-bmr-and-would-like-to-do-a-exhaustive-search" class="section level1">
 <h1>When no preferred BMR and would like to do a exhaustive search</h1>
 <p>This is a computationally intensive procedure. <code>n_sample = 100</code> is preferred but for demonstration, <code>n_sample = 10</code> is used. Expressions are used to delay the execution of commands.</p>
-<p>In <code>combi_run_rcurvep</code> function, functions from <strong>furrr</strong> package are embedded. Use <code>future::plan()</code> to control the types of calculation.</p>
+<p>In <code>combi_run_rcurvep</code> function, <code>future_pmap</code> function from <strong>furrr</strong> package is embedded. Use <code>future::plan()</code> to control the types of calculation.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"></a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="co"># sequential run</span></a>
 <a class="sourceLine" id="cb3-3" title="3">seq_run_multi &lt;-<span class="st"> </span><span class="kw">expression</span>(</a>
@@ -1663,11 +1664,11 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb4-4" title="4">  <span class="kw">eval</span>(par_run_multi),</a>
 <a class="sourceLine" id="cb4-5" title="5">  <span class="dt">times =</span> <span class="dv">10</span></a>
 <a class="sourceLine" id="cb4-6" title="6">)</a></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co">#&gt; run_speed_multi_rcurvep</span></a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co">#&gt; run_speed_multi_rcurvep </span></a>
 <a class="sourceLine" id="cb5-2" title="2"><span class="co">#Unit: seconds</span></a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="co">#                expr      min       lq     mean   median       uq      max neval</span></a>
-<a class="sourceLine" id="cb5-4" title="4"><span class="co"># eval(seq_run_multi) 61.06341 61.12504 61.79744 61.43494 62.17374 63.99470    10</span></a>
-<a class="sourceLine" id="cb5-5" title="5"><span class="co"># eval(par_run_multi) 18.87097 19.36093 19.74137 19.50655 20.42096 20.97378    10</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-3" title="3"><span class="co">#                expr      min       lq     mean   median       uq      max neval cld</span></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="co"># eval(seq_run_multi) 70.97373 71.06332 73.85309 74.02031 75.58980 77.31413    10  a </span></a>
+<a class="sourceLine" id="cb5-5" title="5"><span class="co"># eval(par_run_multi) 22.73920 23.86592 24.80765 25.09510 25.36901 27.39045    10   b</span></a></code></pre></div>
 </div>
 <div id="when-preferred-bmrs-are-available-for-endpoints" class="section level1">
 <h1>When preferred BMRs are available for endpoints</h1>
@@ -1694,7 +1695,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="set-up-the-expressions" class="section level2">
 <h2>Set up the expressions</h2>
 <p><code>n_sample = 1000</code> is preferred but for demonstration, <code>n_sample = 100</code> is used.</p>
-<p>For sequential run, <code>purrr::pmap</code> is used. For parallel run, <code>furrr::future_pmap</code> is used</p>
+<p>In <code>combi_run_rcurvep</code> function, <code>future_pmap</code> function from <strong>furrr</strong> package is embedded. Using <code>future_pmap</code> function unexpectedly decreased the speed.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="co"># sequential run</span></a>
 <a class="sourceLine" id="cb8-2" title="2">seq_run_bmr &lt;-<span class="st"> </span><span class="kw">expression</span>(</a>
 <a class="sourceLine" id="cb8-3" title="3">  future<span class="op">::</span><span class="kw">plan</span>(sequential),</a>
@@ -1702,35 +1703,49 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb8-5" title="5">)</a>
 <a class="sourceLine" id="cb8-6" title="6"></a>
 <a class="sourceLine" id="cb8-7" title="7"><span class="co"># parallel run</span></a>
-<a class="sourceLine" id="cb8-8" title="8">par_run_bmr &lt;-<span class="st"> </span><span class="kw">expression</span>(</a>
+<a class="sourceLine" id="cb8-8" title="8">par_run_bmr1 &lt;-<span class="st"> </span><span class="kw">expression</span>(</a>
 <a class="sourceLine" id="cb8-9" title="9">  </a>
 <a class="sourceLine" id="cb8-10" title="10">  future<span class="op">::</span><span class="kw">plan</span>(multisession, <span class="dt">workers =</span> <span class="dv">10</span>),</a>
 <a class="sourceLine" id="cb8-11" title="11">  </a>
-<a class="sourceLine" id="cb8-12" title="12">  <span class="co"># calculation</span></a>
-<a class="sourceLine" id="cb8-13" title="13">  <span class="co"># there is no need to use future_pmap here </span></a>
-<a class="sourceLine" id="cb8-14" title="14">  <span class="kw">pmap</span>(inp_tb, <span class="op">~</span><span class="st"> </span><span class="kw">combi_run_rcurvep</span>(..<span class="dv">4</span>, <span class="dt">TRSH =</span> ..<span class="dv">3</span>, <span class="dt">RNGE =</span> ..<span class="dv">1</span>, <span class="dt">n_samples =</span> <span class="dv">100</span>, <span class="dt">seed =</span> <span class="dv">300</span>, <span class="dt">keep_sets =</span> <span class="kw">c</span>(<span class="st">&quot;act_set&quot;</span>))),</a>
-<a class="sourceLine" id="cb8-15" title="15"></a>
-<a class="sourceLine" id="cb8-16" title="16">  future<span class="op">::</span><span class="kw">plan</span>(sequential)</a>
-<a class="sourceLine" id="cb8-17" title="17">)</a></code></pre></div>
+<a class="sourceLine" id="cb8-12" title="12">  <span class="co"># calculation with no additional future_pmap</span></a>
+<a class="sourceLine" id="cb8-13" title="13">  <span class="kw">pmap</span>(inp_tb, <span class="op">~</span><span class="st"> </span><span class="kw">combi_run_rcurvep</span>(..<span class="dv">4</span>, <span class="dt">TRSH =</span> ..<span class="dv">3</span>, <span class="dt">RNGE =</span> ..<span class="dv">1</span>, <span class="dt">n_samples =</span> <span class="dv">100</span>, <span class="dt">seed =</span> <span class="dv">300</span>, <span class="dt">keep_sets =</span> <span class="kw">c</span>(<span class="st">&quot;act_set&quot;</span>))),</a>
+<a class="sourceLine" id="cb8-14" title="14"></a>
+<a class="sourceLine" id="cb8-15" title="15">  future<span class="op">::</span><span class="kw">plan</span>(sequential)</a>
+<a class="sourceLine" id="cb8-16" title="16">)</a>
+<a class="sourceLine" id="cb8-17" title="17"></a>
+<a class="sourceLine" id="cb8-18" title="18"></a>
+<a class="sourceLine" id="cb8-19" title="19"><span class="co"># parallel run</span></a>
+<a class="sourceLine" id="cb8-20" title="20">par_run_bmr2 &lt;-<span class="st"> </span><span class="kw">expression</span>(</a>
+<a class="sourceLine" id="cb8-21" title="21">  </a>
+<a class="sourceLine" id="cb8-22" title="22">  future<span class="op">::</span><span class="kw">plan</span>(multisession, <span class="dt">workers =</span> <span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb8-23" title="23">  </a>
+<a class="sourceLine" id="cb8-24" title="24">  <span class="co"># calculation with additional future_pmap</span></a>
+<a class="sourceLine" id="cb8-25" title="25">  <span class="kw">future_pmap</span>(inp_tb, <span class="op">~</span><span class="st"> </span><span class="kw">combi_run_rcurvep</span>(..<span class="dv">4</span>, <span class="dt">TRSH =</span> ..<span class="dv">3</span>, <span class="dt">RNGE =</span> ..<span class="dv">1</span>, <span class="dt">n_samples =</span> <span class="dv">100</span>, <span class="dt">seed =</span> <span class="dv">300</span>, <span class="dt">keep_sets =</span> <span class="kw">c</span>(<span class="st">&quot;act_set&quot;</span>)), <span class="dt">.options =</span> <span class="kw">furrr_options</span>(<span class="dt">seed =</span> <span class="dv">300</span>)),</a>
+<a class="sourceLine" id="cb8-26" title="26"></a>
+<a class="sourceLine" id="cb8-27" title="27">  future<span class="op">::</span><span class="kw">plan</span>(sequential)</a>
+<a class="sourceLine" id="cb8-28" title="28">)</a></code></pre></div>
 </div>
 </div>
 <div id="calculate-10-times-and-compare-the-results-1" class="section level1">
 <h1>Calculate 10 times and compare the results</h1>
-<p>Due to the long time, the results are pasted below. Parallel calculation is faster.</p>
+<p>Due to the long time, the results are pasted below. Parallel calculation is faster when no additional future_pmap is used.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">run_speed_bmr_rcurvep &lt;-<span class="st"> </span><span class="kw">microbenchmark</span>(</a>
 <a class="sourceLine" id="cb9-2" title="2">  <span class="kw">eval</span>(seq_run_bmr),</a>
-<a class="sourceLine" id="cb9-3" title="3">  <span class="kw">eval</span>(par_run_bmr),</a>
-<a class="sourceLine" id="cb9-4" title="4">  <span class="dt">times =</span> <span class="dv">10</span></a>
-<a class="sourceLine" id="cb9-5" title="5">)</a></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="co">#&gt; run_speed_bmr_rcurvep</span></a>
-<a class="sourceLine" id="cb10-2" title="2"><span class="co">#Unit: seconds</span></a>
-<a class="sourceLine" id="cb10-3" title="3"><span class="co">#              expr      min       lq     mean   median       uq      max neval</span></a>
-<a class="sourceLine" id="cb10-4" title="4"><span class="co"># eval(seq_run_bmr) 35.51327 35.59489 35.79890 35.81629 35.88001 36.28173    10</span></a>
-<a class="sourceLine" id="cb10-5" title="5"><span class="co"># eval(par_run_bmr) 14.78751 15.52596 16.19503 16.14672 16.50997 17.82284    10</span></a></code></pre></div>
+<a class="sourceLine" id="cb9-3" title="3">  <span class="kw">eval</span>(par_run_bmr1),</a>
+<a class="sourceLine" id="cb9-4" title="4">  <span class="kw">eval</span>(par_run_bmr2),</a>
+<a class="sourceLine" id="cb9-5" title="5">  <span class="dt">times =</span> <span class="dv">10</span></a>
+<a class="sourceLine" id="cb9-6" title="6">)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"></a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="co">#&gt; run_speed_bmr_rcurvep</span></a>
+<a class="sourceLine" id="cb10-3" title="3"><span class="co">#Unit: seconds</span></a>
+<a class="sourceLine" id="cb10-4" title="4"><span class="co">#               expr      min       lq     mean   median       uq      max neval cld</span></a>
+<a class="sourceLine" id="cb10-5" title="5"><span class="co">#  eval(seq_run_bmr) 39.29451 40.34472 42.08456 40.92504 44.08229 47.01601    10 a  </span></a>
+<a class="sourceLine" id="cb10-6" title="6"><span class="co"># eval(par_run_bmr1) 17.66869 18.38648 18.89080 18.80669 19.20098 20.97384    10  b </span></a>
+<a class="sourceLine" id="cb10-7" title="7"><span class="co"># eval(par_run_bmr2) 24.38823 25.35811 25.46403 25.48099 25.83589 26.54293    10   c</span></a></code></pre></div>
 </div>
 <div id="fitting-based-on-simulated-curves-using-run_fit" class="section level1">
 <h1>Fitting based on simulated curves using run_fit</h1>
-<p>In <code>run_fit</code> function, functions from <strong>furrr</strong> package are embedded. Use <code>future::plan()</code> to control the types of calculation.</p>
+<p>In <code>run_fit</code> function, <code>future_map</code> function from <strong>furrr</strong> package are embedded. Use <code>future::plan()</code> to control the types of calculation.</p>
 <div id="set-up-the-expressions-1" class="section level2">
 <h2>Set up the expressions</h2>
 <p><code>n_sample = 1000</code> is preferred but for demonstration, <code>n_sample = 100</code> is used. Also, <code>create_dataset</code> function is used to convert the incidence data into response data.</p>
@@ -1770,7 +1785,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 <div id="fitting-based-on-simulated-curves-using-run_fit-and-pmap" class="section level1">
 <h1>Fitting based on simulated curves using run_fit and pmap</h1>
-<p>We can also use similar syntax as <code>combi_run_rcurvep</code> to run multiple datasets.</p>
+<p>We can also use similar syntax as <code>combi_run_rcurvep</code> to run multiple datasets by testing to include or not include future_pmap.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"></a>
 <a class="sourceLine" id="cb14-2" title="2"><span class="co"># make the incidence data as response data</span></a>
 <a class="sourceLine" id="cb14-3" title="3">inp_tb_resp &lt;-<span class="st"> </span>inp_tb <span class="op">|</span><span class="er">&gt;</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">data =</span> <span class="kw">map</span>(data, create_dataset))</a>
@@ -1778,36 +1793,50 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb14-5" title="5"><span class="co"># sequential run</span></a>
 <a class="sourceLine" id="cb14-6" title="6">seq_fit_hill_multi &lt;-<span class="st"> </span><span class="kw">expression</span>(</a>
 <a class="sourceLine" id="cb14-7" title="7">  future<span class="op">::</span><span class="kw">plan</span>(sequential),</a>
-<a class="sourceLine" id="cb14-8" title="8">  </a>
-<a class="sourceLine" id="cb14-9" title="9">  <span class="kw">pmap</span>(inp_tb_resp, <span class="op">~</span><span class="st"> </span><span class="kw">run_fit</span>(..<span class="dv">4</span>, <span class="dt">modls =</span> <span class="st">&quot;hill&quot;</span>, <span class="dt">hill_pdir =</span> <span class="kw">ifelse</span>(..<span class="dv">3</span> <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">-1</span>, <span class="dv">1</span>), <span class="dt">n_samples =</span> <span class="dv">100</span>, <span class="dt">keep_sets =</span> <span class="kw">c</span>(<span class="st">&quot;fit_set&quot;</span>)), <span class="dt">.options =</span> <span class="kw">furrr_options</span>(<span class="dt">seed =</span> <span class="dv">2023</span>))</a>
+<a class="sourceLine" id="cb14-8" title="8">  <span class="kw">set.seed</span>(<span class="dv">2003</span>),</a>
+<a class="sourceLine" id="cb14-9" title="9">  <span class="kw">pmap</span>(inp_tb_resp, <span class="op">~</span><span class="st"> </span><span class="kw">run_fit</span>(..<span class="dv">4</span>, <span class="dt">modls =</span> <span class="st">&quot;hill&quot;</span>, <span class="dt">hill_pdir =</span> <span class="kw">ifelse</span>(..<span class="dv">3</span> <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">-1</span>, <span class="dv">1</span>), <span class="dt">n_samples =</span> <span class="dv">100</span>, <span class="dt">keep_sets =</span> <span class="kw">c</span>(<span class="st">&quot;fit_set&quot;</span>)))</a>
 <a class="sourceLine" id="cb14-10" title="10">)</a>
-<a class="sourceLine" id="cb14-11" title="11">  </a>
+<a class="sourceLine" id="cb14-11" title="11"></a>
 <a class="sourceLine" id="cb14-12" title="12"><span class="co"># parallel run</span></a>
-<a class="sourceLine" id="cb14-13" title="13">para_fit_hill_multi &lt;-<span class="st"> </span><span class="kw">expression</span>(</a>
+<a class="sourceLine" id="cb14-13" title="13">para_fit_hill_multi1 &lt;-<span class="st"> </span><span class="kw">expression</span>(</a>
 <a class="sourceLine" id="cb14-14" title="14">  future<span class="op">::</span><span class="kw">plan</span>(multisession, <span class="dt">workers =</span> <span class="dv">10</span>), </a>
-<a class="sourceLine" id="cb14-15" title="15">  </a>
-<a class="sourceLine" id="cb14-16" title="16">  <span class="co"># calculation, no need to use future_pmap</span></a>
-<a class="sourceLine" id="cb14-17" title="17">  <span class="kw">pmap</span>(inp_tb_resp, <span class="op">~</span><span class="st"> </span><span class="kw">run_fit</span>(..<span class="dv">4</span>, <span class="dt">modls =</span> <span class="st">&quot;hill&quot;</span>, <span class="dt">hill_pdir =</span> <span class="kw">ifelse</span>(..<span class="dv">3</span> <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">-1</span>, <span class="dv">1</span>), <span class="dt">n_samples =</span> <span class="dv">100</span>, <span class="dt">keep_sets =</span> <span class="kw">c</span>(<span class="st">&quot;fit_set&quot;</span>)), <span class="dt">.options =</span> <span class="kw">furrr_options</span>(<span class="dt">seed =</span> <span class="dv">2023</span>)),</a>
-<a class="sourceLine" id="cb14-18" title="18">  future<span class="op">::</span><span class="kw">plan</span>(sequential)</a>
-<a class="sourceLine" id="cb14-19" title="19">)</a></code></pre></div>
+<a class="sourceLine" id="cb14-15" title="15">  <span class="kw">set.seed</span>(<span class="dv">2003</span>),</a>
+<a class="sourceLine" id="cb14-16" title="16">  <span class="co"># no future_pmap</span></a>
+<a class="sourceLine" id="cb14-17" title="17">  <span class="kw">pmap</span>(inp_tb_resp, <span class="op">~</span><span class="st"> </span><span class="kw">run_fit</span>(..<span class="dv">4</span>, <span class="dt">modls =</span> <span class="st">&quot;hill&quot;</span>, <span class="dt">hill_pdir =</span> <span class="kw">ifelse</span>(..<span class="dv">3</span> <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">-1</span>, <span class="dv">1</span>), <span class="dt">n_samples =</span> <span class="dv">100</span>, <span class="dt">keep_sets =</span> <span class="kw">c</span>(<span class="st">&quot;fit_set&quot;</span>))),</a>
+<a class="sourceLine" id="cb14-18" title="18">  </a>
+<a class="sourceLine" id="cb14-19" title="19">  future<span class="op">::</span><span class="kw">plan</span>(sequential)</a>
+<a class="sourceLine" id="cb14-20" title="20">)</a>
+<a class="sourceLine" id="cb14-21" title="21">  </a>
+<a class="sourceLine" id="cb14-22" title="22"><span class="co"># parallel run</span></a>
+<a class="sourceLine" id="cb14-23" title="23">para_fit_hill_multi2 &lt;-<span class="st"> </span><span class="kw">expression</span>(</a>
+<a class="sourceLine" id="cb14-24" title="24">  future<span class="op">::</span><span class="kw">plan</span>(multisession, <span class="dt">workers =</span> <span class="dv">10</span>), </a>
+<a class="sourceLine" id="cb14-25" title="25">  </a>
+<a class="sourceLine" id="cb14-26" title="26">  <span class="co"># with future_pmap</span></a>
+<a class="sourceLine" id="cb14-27" title="27">  <span class="kw">future_pmap</span>(inp_tb_resp, <span class="op">~</span><span class="st"> </span><span class="kw">run_fit</span>(..<span class="dv">4</span>, <span class="dt">modls =</span> <span class="st">&quot;hill&quot;</span>, <span class="dt">hill_pdir =</span> <span class="kw">ifelse</span>(..<span class="dv">3</span> <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">-1</span>, <span class="dv">1</span>), <span class="dt">n_samples =</span> <span class="dv">100</span>, <span class="dt">keep_sets =</span> <span class="kw">c</span>(<span class="st">&quot;fit_set&quot;</span>)), <span class="dt">.options =</span> <span class="kw">furrr_options</span>(<span class="dt">seed =</span> <span class="dv">2023</span>)),</a>
+<a class="sourceLine" id="cb14-28" title="28">  </a>
+<a class="sourceLine" id="cb14-29" title="29">  future<span class="op">::</span><span class="kw">plan</span>(sequential)</a>
+<a class="sourceLine" id="cb14-30" title="30">)</a></code></pre></div>
 </div>
 <div id="calculate-10-times-and-compare-the-results-3" class="section level1">
 <h1>Calculate 10 times and compare the results</h1>
-<p>Due to the long time, the results are pasted below. Parallel calculation is faster.</p>
+<p>Due to the long time, the results are pasted below. Parallel calculation is faster with <code>future_pmap</code> function. It is possible because that only future_map function is used in the run_fit function.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">run_speed_fit_hill_multi &lt;-<span class="st"> </span><span class="kw">microbenchmark</span>(</a>
 <a class="sourceLine" id="cb15-2" title="2">  <span class="kw">eval</span>(seq_fit_hill_multi),</a>
-<a class="sourceLine" id="cb15-3" title="3">  <span class="kw">eval</span>(para_fit_hill_multi),</a>
-<a class="sourceLine" id="cb15-4" title="4">  <span class="dt">times =</span> <span class="dv">10</span></a>
-<a class="sourceLine" id="cb15-5" title="5">)</a></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="co">#&gt; run_speed_fit_hill_multi</span></a>
-<a class="sourceLine" id="cb16-2" title="2"><span class="co">#Unit: seconds</span></a>
-<a class="sourceLine" id="cb16-3" title="3"><span class="co">#                      expr       min        lq      mean   median       uq      max neval</span></a>
-<a class="sourceLine" id="cb16-4" title="4"><span class="co">#  eval(seq_fit_hill_multi) 219.04359 220.59658 222.32948 222.2282 224.4493 225.2394    10</span></a>
-<a class="sourceLine" id="cb16-5" title="5"><span class="co"># eval(para_fit_hill_multi)  97.04507  98.85834  99.67153 100.1014 100.9218 101.0854    10</span></a></code></pre></div>
+<a class="sourceLine" id="cb15-3" title="3">  <span class="kw">eval</span>(para_fit_hill_multi1),</a>
+<a class="sourceLine" id="cb15-4" title="4">  <span class="kw">eval</span>(para_fit_hill_multi2),</a>
+<a class="sourceLine" id="cb15-5" title="5">  <span class="dt">times =</span> <span class="dv">10</span></a>
+<a class="sourceLine" id="cb15-6" title="6">)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"></a>
+<a class="sourceLine" id="cb16-2" title="2"><span class="co">#&gt; run_speed_fit_hill_multi</span></a>
+<a class="sourceLine" id="cb16-3" title="3"><span class="co">#Unit: seconds</span></a>
+<a class="sourceLine" id="cb16-4" title="4"><span class="co">#                       expr       min        lq      mean    median        uq       max neval cld</span></a>
+<a class="sourceLine" id="cb16-5" title="5"><span class="co"># eval(seq_fit_hill_multi) 210.70736 211.45879 214.57743 212.88469 217.75672 222.96850    10 a  </span></a>
+<a class="sourceLine" id="cb16-6" title="6"><span class="co"># eval(para_fit_hill_multi1)  95.43516  95.98258  96.56978  96.65905  97.00355  97.55148    10  b </span></a>
+<a class="sourceLine" id="cb16-7" title="7"><span class="co"># eval(para_fit_hill_multi2) 121.67944 122.25914 122.66318 122.80333 123.16349 123.24216    10   c</span></a></code></pre></div>
 </div>
 <div id="fitting-based-on-original-data" class="section level1">
 <h1>Fitting based on original data</h1>
-<p>In <code>run_fit</code> function, functions from <strong>furrr</strong> package are embedded. Use <code>future::plan()</code> to control the types of calculation.</p>
+<p>In <code>run_fit</code> function, <code>future_map</code> from <strong>furrr</strong> package are embedded. Use <code>future::plan()</code> to control the types of calculation.</p>
 <p>Two parameters are tested: <em>hill</em> and <em>cc2</em>. <em>hill</em> is 3-parameter Hill equation implemented using R. <em>cc2</em> is 4-parameter Hill equation implemented using Java.</p>
 <p>The dataset - respd_1 - includes 3000 curves, is not available in the package. If the dataset is too small, it might not worthwhile to start the parallel computing.</p>
 <div id="use-modls-hill-parameter" class="section level2">

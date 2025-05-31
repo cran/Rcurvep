@@ -6,6 +6,7 @@ knitr::opts_chunk$set(
 
 ## ----setup, warning=FALSE, message=FALSE--------------------------------------
 library(future)
+library(furrr)
 library(dplyr)
 library(purrr)
 #library(microbenchmark) # it is needed if recalculating the comparison
@@ -66,11 +67,11 @@ par_run_multi <- expression(
 #  )
 
 ## -----------------------------------------------------------------------------
-#> run_speed_multi_rcurvep
+#> run_speed_multi_rcurvep 
 #Unit: seconds
-#                expr      min       lq     mean   median       uq      max neval
-# eval(seq_run_multi) 61.06341 61.12504 61.79744 61.43494 62.17374 63.99470    10
-# eval(par_run_multi) 18.87097 19.36093 19.74137 19.50655 20.42096 20.97378    10
+#                expr      min       lq     mean   median       uq      max neval cld
+# eval(seq_run_multi) 70.97373 71.06332 73.85309 74.02031 75.58980 77.31413    10  a 
+# eval(par_run_multi) 22.73920 23.86592 24.80765 25.09510 25.36901 27.39045    10   b
 
 ## -----------------------------------------------------------------------------
 bmr_out <- estimate_dataset_bmr(zfishdev_act, plot = FALSE)
@@ -93,32 +94,45 @@ seq_run_bmr <- expression(
 )
 
 # parallel run
-par_run_bmr <- expression(
+par_run_bmr1 <- expression(
   
   future::plan(multisession, workers = 10),
   
-  # calculation
-  # there is no need to use future_pmap here 
+  # calculation with no additional future_pmap
   pmap(inp_tb, ~ combi_run_rcurvep(..4, TRSH = ..3, RNGE = ..1, n_samples = 100, seed = 300, keep_sets = c("act_set"))),
 
   future::plan(sequential)
 )
 
 
+# parallel run
+par_run_bmr2 <- expression(
+  
+  future::plan(multisession, workers = 10),
+  
+  # calculation with additional future_pmap
+  future_pmap(inp_tb, ~ combi_run_rcurvep(..4, TRSH = ..3, RNGE = ..1, n_samples = 100, seed = 300, keep_sets = c("act_set")), .options = furrr_options(seed = 300)),
+
+  future::plan(sequential)
+)
+
 
 ## ----eval=FALSE---------------------------------------------------------------
 #  run_speed_bmr_rcurvep <- microbenchmark(
 #    eval(seq_run_bmr),
-#    eval(par_run_bmr),
+#    eval(par_run_bmr1),
+#    eval(par_run_bmr2),
 #    times = 10
 #  )
 
 ## -----------------------------------------------------------------------------
+
 #> run_speed_bmr_rcurvep
 #Unit: seconds
-#              expr      min       lq     mean   median       uq      max neval
-# eval(seq_run_bmr) 35.51327 35.59489 35.79890 35.81629 35.88001 36.28173    10
-# eval(par_run_bmr) 14.78751 15.52596 16.19503 16.14672 16.50997 17.82284    10
+#               expr      min       lq     mean   median       uq      max neval cld
+#  eval(seq_run_bmr) 39.29451 40.34472 42.08456 40.92504 44.08229 47.01601    10 a  
+# eval(par_run_bmr1) 17.66869 18.38648 18.89080 18.80669 19.20098 20.97384    10  b 
+# eval(par_run_bmr2) 24.38823 25.35811 25.46403 25.48099 25.83589 26.54293    10   c
 
 ## -----------------------------------------------------------------------------
 
@@ -162,16 +176,27 @@ inp_tb_resp <- inp_tb |> mutate(data = map(data, create_dataset))
 # sequential run
 seq_fit_hill_multi <- expression(
   future::plan(sequential),
+  set.seed(2003),
+  pmap(inp_tb_resp, ~ run_fit(..4, modls = "hill", hill_pdir = ifelse(..3 < 0, -1, 1), n_samples = 100, keep_sets = c("fit_set")))
+)
+
+# parallel run
+para_fit_hill_multi1 <- expression(
+  future::plan(multisession, workers = 10), 
+  set.seed(2003),
+  # no future_pmap
+  pmap(inp_tb_resp, ~ run_fit(..4, modls = "hill", hill_pdir = ifelse(..3 < 0, -1, 1), n_samples = 100, keep_sets = c("fit_set"))),
   
-  pmap(inp_tb_resp, ~ run_fit(..4, modls = "hill", hill_pdir = ifelse(..3 < 0, -1, 1), n_samples = 100, keep_sets = c("fit_set")), .options = furrr_options(seed = 2023))
+  future::plan(sequential)
 )
   
 # parallel run
-para_fit_hill_multi <- expression(
+para_fit_hill_multi2 <- expression(
   future::plan(multisession, workers = 10), 
   
-  # calculation, no need to use future_pmap
-  pmap(inp_tb_resp, ~ run_fit(..4, modls = "hill", hill_pdir = ifelse(..3 < 0, -1, 1), n_samples = 100, keep_sets = c("fit_set")), .options = furrr_options(seed = 2023)),
+  # with future_pmap
+  future_pmap(inp_tb_resp, ~ run_fit(..4, modls = "hill", hill_pdir = ifelse(..3 < 0, -1, 1), n_samples = 100, keep_sets = c("fit_set")), .options = furrr_options(seed = 2023)),
+  
   future::plan(sequential)
 )
 
@@ -179,16 +204,19 @@ para_fit_hill_multi <- expression(
 ## ----eval=FALSE---------------------------------------------------------------
 #  run_speed_fit_hill_multi <- microbenchmark(
 #    eval(seq_fit_hill_multi),
-#    eval(para_fit_hill_multi),
+#    eval(para_fit_hill_multi1),
+#    eval(para_fit_hill_multi2),
 #    times = 10
 #  )
 
 ## -----------------------------------------------------------------------------
+
 #> run_speed_fit_hill_multi
 #Unit: seconds
-#                      expr       min        lq      mean   median       uq      max neval
-#  eval(seq_fit_hill_multi) 219.04359 220.59658 222.32948 222.2282 224.4493 225.2394    10
-# eval(para_fit_hill_multi)  97.04507  98.85834  99.67153 100.1014 100.9218 101.0854    10
+#                       expr       min        lq      mean    median        uq       max neval cld
+# eval(seq_fit_hill_multi) 210.70736 211.45879 214.57743 212.88469 217.75672 222.96850    10 a  
+# eval(para_fit_hill_multi1)  95.43516  95.98258  96.56978  96.65905  97.00355  97.55148    10  b 
+# eval(para_fit_hill_multi2) 121.67944 122.25914 122.66318 122.80333 123.16349 123.24216    10   c
 
 ## ----eval=FALSE---------------------------------------------------------------
 #  
